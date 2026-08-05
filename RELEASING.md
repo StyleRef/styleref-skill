@@ -19,10 +19,18 @@ user-visible change to the skill ends with a version bump, even a one-word one.
    claude --plugin-dir .
    ```
 4. **Commit and push** here, in this repository. Nothing is published until this
-   push lands — the monorepo stores only a pointer.
-5. **Tag** the release:
+   push lands — the monorepo stores only a pointer. When this repo is checked
+   out as the monorepo's submodule it sits on a **detached HEAD**, so
+   `git push origin main` silently pushes a stale local ref instead of your
+   work. Push explicitly:
    ```bash
-   git tag v0.1.1 && git push origin v0.1.1
+   git push origin HEAD:main
+   ```
+5. **Tag** the release. `claude plugin tag` uses the `{name}--v{version}`
+   convention and refuses to tag when `plugin.json` and the marketplace entry
+   disagree, which is the mistake a hand-written tag hides:
+   ```bash
+   claude plugin tag . --push -m "styleref %s"
    ```
 6. **Bump the pointer** in the StyleRef monorepo, where this repo is the
    `agent-skill/` submodule:
