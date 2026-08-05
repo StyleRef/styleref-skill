@@ -1,4 +1,5 @@
 {
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
   "name": "styleref",
   "description": "The StyleRef Agent Skill and MCP server — reusable creative style specs for any AI tool.",
   "owner": {
