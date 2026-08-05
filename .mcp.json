@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "styleref": {
+      "type": "http",
+      "url": "https://styleref.io/api/mcp"
+    }
+  }
+}

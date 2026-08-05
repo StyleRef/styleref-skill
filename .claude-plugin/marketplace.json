@@ -1,0 +1,17 @@
+{
+  "name": "styleref",
+  "description": "The StyleRef Agent Skill and MCP server — reusable creative style specs for any AI tool.",
+  "owner": {
+    "name": "StyleRef",
+    "url": "https://styleref.io"
+  },
+  "plugins": [
+    {
+      "name": "styleref",
+      "source": "./",
+      "description": "Fetch and apply reusable creative styles (visual + voice) from StyleRef.io, with the StyleRef MCP server preconfigured.",
+      "category": "design",
+      "tags": ["style", "design", "branding", "images", "prompting"]
+    }
+  ]
+}
