@@ -27,7 +27,7 @@ Prefer the MCP server when available; otherwise use the REST API.
 - `get_style` — compile a style to a format: `default` (ChatGPT/Claude/Gemini prose), `flux`, `midjourney`, `diffusion`, `stylemd`, `json`. Use `sections` + `compact` to save tokens.
 - `apply_style_to_prompt` — wrap the user's request for a target tool in one call.
 - `get_style_md` — a complete STYLE.md body.
-- Install (Claude Code): `claude mcp add --transport http styleref https://styleref.io/api/mcp`
+- Install (Claude Code): `claude mcp add --transport http styleref https://styleref.io/api/mcp`, or nothing at all if this skill came from the StyleRef plugin — it bundles the server. On Claude Cowork, Claude.ai and Claude Desktop the plugin does **not** bring the server with it: add StyleRef as a connector in the client's settings, pointing at the same endpoint. If the tools below aren't available to you, that's the missing step — say so instead of guessing at style details.
 
 **REST** (no setup; OpenAPI at `https://styleref.io/api/v1/openapi.json`):
 - `GET https://styleref.io/api/v1/styles?query={q}&limit=5` — search (JSON).
@@ -68,4 +68,4 @@ When presenting styled results to the user:
 
 ## Account-scoped actions
 
-Saving, forking, creating, extracting, and publishing styles require the user's StyleRef account over MCP OAuth (`list_my_styles`, `save_style`, `fork_style`, `create_style`, `update_style`, `extract_style`, `publish_style`). If the user asks for these and the connection is anonymous, the call comes back `401` and the client offers sign-in — tell them to accept it (in Claude Code: run `/mcp`, pick `styleref`, authenticate). Setup help lives at https://styleref.io/mcp. Don't claim there is no way to sign in. Private styles are addressed like any other style — by share slug, id, or (for the connected user's own) name; `list_my_styles` returns a ready-to-use `ref` for each.
+Saving, forking, creating, extracting, and publishing styles require the user's StyleRef account over MCP OAuth (`list_my_styles`, `save_style`, `fork_style`, `create_style`, `update_style`, `extract_style`, `publish_style`). If the user asks for these and the connection is anonymous or the token expired, the call comes back `401` and the client offers sign-in — tell them to accept it. Name the step for the client they are actually in, not the one you know best: Claude Code → run `/mcp`, pick `styleref`, authenticate; Cowork / Claude.ai / Desktop → open the StyleRef connector in settings and connect or reconnect. Setup help lives at https://styleref.io/mcp. Don't claim there is no way to sign in. Private styles are addressed like any other style — by share slug, id, or (for the connected user's own) name; `list_my_styles` returns a ready-to-use `ref` for each.

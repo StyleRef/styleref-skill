@@ -29,6 +29,13 @@ The plugin adds the `styleref` skill and connects the StyleRef MCP server at
 `https://styleref.io/api/mcp`. Reading public styles is anonymous; saving,
 forking, extracting, and publishing prompt you to connect your account.
 
+### Claude Cowork, Claude.ai, Claude Desktop
+
+These surfaces take the **skill** from the plugin but not the MCP server it
+bundles, so add StyleRef as a **connector** in the client's settings, pointing
+at `https://styleref.io/api/mcp`. Without it the agent knows how to apply a
+style and has no way to fetch one.
+
 ### Any other agent (skill only)
 
 The skill is a plain `SKILL.md` folder, so it works in any skills-compatible

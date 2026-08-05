@@ -2,7 +2,7 @@
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "styleref",
   "displayName": "StyleRef",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Fetch and apply reusable creative styles (visual + voice) from StyleRef.io — in ChatGPT, Claude, Gemini, Midjourney, FLUX, Stable Diffusion, or a repo's STYLE.md.",
   "author": {
     "name": "StyleRef",
