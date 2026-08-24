@@ -7,8 +7,10 @@ user-visible change to the skill ends with a version bump, even a one-word one.
 
 ## Steps
 
-1. **Edit** `skills/styleref/SKILL.md` (or the manifests). Keep the frontmatter
-   `name` equal to the directory name — CI fails otherwise.
+1. **Edit** `skills/styleref/SKILL.md`, `skills/styleref-figma/SKILL.md` (or the
+   manifests). Keep each frontmatter `name` equal to its directory name — CI
+   fails otherwise. One version pins both skills: a change to either one is a
+   release of the plugin.
 2. **Bump** `version` in `.claude-plugin/plugin.json`. Semver against what the
    *agent* does: patch for wording, minor for new guidance or a new tool the
    skill knows about, major only if the skill's name or scope changes.
@@ -51,10 +53,13 @@ or agents will call tools that no longer exist:
 
 | If this changes in the app | Update here |
 | --- | --- |
-| MCP tool names, parameters, or scopes | the **How to fetch a style** and **Account-scoped actions** sections |
-| REST endpoints or query parameters | the **How to fetch a style** REST list |
-| Compile formats (`default`, `flux`, `midjourney`, `diffusion`, `stylemd`, `json`) | the **How to apply a style per tool** table |
-| The STYLE.md convention or its frontmatter | the **STYLE.md convention** section |
+| MCP tool names, parameters, or scopes | `styleref`: **How to fetch a style** and **Account-scoped actions**; `styleref-figma`: **Going further** |
+| REST endpoints or query parameters | `styleref`: the **How to fetch a style** REST list; `styleref-figma`: the **Lane A** steps and the **When something goes wrong** table |
+| Compile formats (`default`, `flux`, `midjourney`, `diffusion`, `stylemd`, `json`) | `styleref`: the **How to apply a style per tool** table |
+| The `json` format's section keys or palette shape | `styleref-figma`: **Lane A** steps 3–5 map those keys onto canvas objects |
+| The gallery's category list | `styleref-figma`: the category list in **Lane A** step 1 |
+| The STYLE.md convention or its frontmatter | `styleref`: the **STYLE.md convention** section |
+| The style schema's section ids | `styleref-figma`: the id list in **Lane B** step 3 |
 
 ## If the skill is listed in the community marketplace
 

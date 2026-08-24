@@ -2,8 +2,8 @@
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "styleref",
   "displayName": "StyleRef",
-  "version": "0.1.2",
-  "description": "Fetch and apply reusable creative styles (visual + voice) from StyleRef.io — in ChatGPT, Claude, Gemini, Midjourney, FLUX, Stable Diffusion, or a repo's STYLE.md.",
+  "version": "0.2.0",
+  "description": "Fetch and apply reusable creative styles (visual + voice) from StyleRef.io — in ChatGPT, Claude, Gemini, Midjourney, FLUX, Stable Diffusion, Figma, or a repo's STYLE.md.",
   "author": {
     "name": "StyleRef",
     "url": "https://styleref.io"
@@ -11,5 +11,5 @@
   "homepage": "https://docs.styleref.io/for-ai-agents/agent-skill",
   "repository": "https://github.com/StyleRef/styleref-skill",
   "license": "MIT",
-  "keywords": ["style", "design", "branding", "images", "prompting", "style-md"]
+  "keywords": ["style", "design", "branding", "images", "prompting", "style-md", "figma"]
 }

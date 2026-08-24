@@ -33,10 +33,10 @@ Prefer the MCP server when available; otherwise use the REST API.
 - `GET https://styleref.io/api/v1/styles?query={q}&limit=5` — search (JSON).
 - `GET https://styleref.io/api/v1/styles/{slug}?format={fmt}&compact=1` — compiled spec (markdown). Add `&raw=1` for the bare spec with no metadata header (pipe straight into an image tool).
 - `GET https://styleref.io/api/v1/styles/{slug}/style.md` — STYLE.md body.
-- `POST https://styleref.io/api/v1/style-md/validate` — lint a STYLE.md.
+- `POST https://styleref.io/api/v1/style-md/validate` — lint a STYLE.md. Body is `{"text": "<file contents>"}`.
 - Optional `Authorization: Bearer` (a StyleRef OAuth access token) also resolves the user's private styles — same refs as any other style.
 
-A style reference may be a share slug (`9a2adtz6-cd8d77ee2f51`), `@handle/name` (URL-encode it in REST paths), or a `https://styleref.io/share/{slug}` URL. With a bearer token, the user's own styles also resolve by name or id.
+A style reference is a share slug (`9a2adtz6-cd8d77ee2f51`), a `https://styleref.io/share/{slug}` URL, or — for the caller's own styles — the style's UUID or a `/styles/{id}` builder URL. A **name is never a ref**, and neither is `@handle/name`: both are rejected with `invalid_ref`, because names are not unique and change on rename. Get a usable ref from `search_styles` / `list_my_styles`, which return one for every style.
 
 ## How to apply a style per tool
 

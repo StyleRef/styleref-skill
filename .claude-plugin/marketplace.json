@@ -10,9 +10,9 @@
     {
       "name": "styleref",
       "source": "./",
-      "description": "Fetch and apply reusable creative styles (visual + voice) from StyleRef.io, with the StyleRef MCP server preconfigured.",
+      "description": "Fetch and apply reusable creative styles (visual + voice) from StyleRef.io — in any AI tool, or as real variables and styles on the Figma canvas — with the StyleRef MCP server preconfigured.",
       "category": "design",
-      "tags": ["style", "design", "branding", "images", "prompting"]
+      "tags": ["style", "design", "branding", "images", "prompting", "figma"]
     }
   ]
 }
