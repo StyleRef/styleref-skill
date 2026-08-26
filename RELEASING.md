@@ -56,7 +56,8 @@ or agents will call tools that no longer exist:
 | MCP tool names, parameters, or scopes | `styleref`: **How to fetch a style** and **Account-scoped actions**; `styleref-figma`: **Going further** |
 | REST endpoints or query parameters | `styleref`: the **How to fetch a style** REST list; `styleref-figma`: the **Lane A** steps and the **When something goes wrong** table |
 | Compile formats (`default`, `flux`, `midjourney`, `diffusion`, `stylemd`, `json`) | `styleref`: the **How to apply a style per tool** table |
-| The `json` format's section keys or palette shape | `styleref-figma`: **Lane A** steps 3–5 map those keys onto canvas objects |
+| The `json` format's section keys or palette shape | `styleref-figma`: **Lane A** steps 3–6 map those keys onto canvas objects |
+| `ui_web` blocks or their option strings (`src/lib/storage/style-schema.json`) | `styleref-figma`: **Lane A** step 5 names the fields and quotes option strings verbatim |
 | The gallery's category list | `styleref-figma`: the category list in **Lane A** step 1 |
 | The STYLE.md convention or its frontmatter | `styleref`: the **STYLE.md convention** section |
 | The style schema's section ids | `styleref-figma`: the id list in **Lane B** step 3 |

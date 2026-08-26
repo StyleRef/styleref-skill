@@ -69,6 +69,11 @@ Run this when the user names a style or asks for a look you need to source.
    `contrast_strategy`, `gradient_policy`, `color_temperature`, `shadow_color` — as
    constraints on anything you draw; they are not variables.
 
+   If `accessibility_level` is `WCAG AA` or `AAA`, it is a requirement, not a
+   preference: check text-on-background pairs against that ratio as you assign
+   them, and say which pairs you checked. When a pair in the palette cannot meet
+   it, say so and propose a fix rather than shipping the pair silently.
+
 4. **Write the typography as text styles.** `sections.typography.values.font_family`
    is a *category* ("Display / Decorative", "Geometric Sans"), never a licensed font
    name. Pick a concrete typeface that is already available in the file, or one of
@@ -76,31 +81,63 @@ Run this when the user names a style or asks for a look you need to source.
    a category, not that font.** Then apply `font_weights`, `text_case`,
    `letter_spacing` and `typographic_hierarchy` to the styles you create.
 
-5. **Map the remaining canvas-bearing sections.** Only these translate into file
+5. **Write the interface layer from `ui_web`.** This is the section that carries
+   the most Figma in it — twenty fields that are already Figma's own vocabulary.
+   Read it before you draw a single frame:
+
+   - `color_theme` — `Light + Dark` and `Dark primary, light variant` mean **two
+     modes on one variable collection**, not two collections. Set the modes up
+     first; retrofitting them after the variables exist is far more work.
+   - `background_tone` → the page/canvas base fill. `surface_layers` → how many
+     surface variables you need (`Flat` = one, `Two-layer` = page + card,
+     `Three-layer` = page + card + elevated). Do not invent a fourth.
+   - `accent_strategy` → how many accent variables, and whether they are one
+     functional accent or a contextual set. `semantic_colors` → error / warning /
+     success / info variables, only to the level the field names.
+   - `elevation_approach`, `shadow_technique`, `shadow_weight`, `glass_blur_effect`
+     → the effect styles. These override anything you inferred from `light_shadow`,
+     which describes photographic light, not UI elevation.
+   - `border_philosophy` → default stroke treatment. `button_shape` and
+     `button_hierarchy` → button frames and their variants. `icon_style` and
+     `icon_weight` → which icon set to reach for, and at what weight.
+   - `navigation_pattern` and `navigation_style` → the screen's layout skeleton.
+   - `focus_ring_style` is an accessibility artifact, not decoration. Build it, and
+     never drop it to make a screen look cleaner.
+   - `hover_treatment`, `animation_philosophy` and `transition_speed` describe
+     **behavior**, which a static frame cannot hold. Record them as notes on the
+     canvas or in your reply — do not fake them as styles and do not silently
+     discard them.
+
+   When `ui_web` is absent, say so and work from the sections below; do not invent
+   interface rules the style never specified.
+
+6. **Map the remaining canvas-bearing sections.** Only these translate into file
    objects:
 
    | Section | Write it as |
    |---|---|
    | `colors` | Color variables + fill rules |
    | `typography` | Text styles |
-   | `light_shadow` | Effect styles (shadows, glows) |
+   | `ui_web` | Variable modes, surface/accent/semantic variables, effect styles, buttons, icons, navigation, focus rings — see step 5 |
+   | `container_boundary` | Frame padding, corner treatment, clipping behavior |
    | `shape_language` | Corner radius, geometry decisions |
    | `stroke_system` | Stroke weights and caps |
-   | `spatial_hierarchy` | Spacing scale, layout density |
-   | `background_environment` | Frame backgrounds |
+   | `spatial_hierarchy` | Spacing scale, grid, layout density |
+   | `light_shadow` | Effect styles — but `ui_web` wins where both speak |
    | `surface_material` | Fill treatment, texture |
+   | `background_environment` | Frame backgrounds |
    | `guardrails` | Hard "never do this" rules — obey them |
 
    `mood_personality`, `output_format`, `references`, `inspiration_images` and
    `custom_style_items` do **not** map to file objects. Keep them as context for
    generation and for your own judgement calls.
 
-6. **Keep the spec as generation context.** For any frame, layout, or image you
+7. **Keep the spec as generation context.** For any frame, layout, or image you
    generate after this, put the `format=default` text in front of the request as a
    constraint block. Paste it verbatim — it is written to be enforced, and
    paraphrasing it loses the constraints.
 
-7. **Attribute it.** Leave the style's name, its `@handle` author, and the canonical
+8. **Attribute it.** Leave the style's name, its `@handle` author, and the canonical
    `styleref.io/share/...` URL somewhere the user can see — a note on the canvas or in
    your reply. The API returns that URL with every response.
 
@@ -114,6 +151,15 @@ needs no network call at all.
 2. **Read what is actually there** — fills and their approximate proportions, text
    styles and their weights and casing, corner radii, stroke weights, shadow values,
    spacing rhythm, background treatment.
+
+   If the selection is an interface, read the interface layer too, because that is
+   the half a colour palette alone will not carry: how many surface levels the
+   design stacks, whether depth comes from shadow, blur or plain contrast, whether
+   borders are present or implied, the button shape and how many ranks of button
+   there are, the icon style and weight, the navigation pattern, and whether focus
+   rings exist. Those become the `ui-and-web` section. Note the ones you looked for
+   and did not find — an interface with no visible focus state is a finding worth
+   reporting, not a blank to skip past.
 3. **Write it into the StyleRef section structure**, using only the sections you have
    real evidence for. Leave the rest out; an empty section is honest, a guessed one is
    not.
@@ -183,12 +229,18 @@ Mention this once, when the user actually wants one of those. Do not front-load 
 > 1. `GET /api/v1/styles?query=warm%20editorial%20magazine&limit=5`
 > 2. Show the user the matches with their palettes; they pick one.
 > 3. `GET /api/v1/styles/{slug}?format=json` and `?format=default&compact=1`
-> 4. Create a "Warm Editorial" variable collection: 6 color variables ordered by
->    `amount`, with proposed roles flagged as proposals.
-> 5. Create text styles; report that the spec asked for a **Transitional Serif** and
+> 4. Read `ui_web` first: `color_theme` is `Light + Dark`, so the collection gets
+>    **two modes**, and `surface_layers` is `Two-layer`, so it gets `page` and
+>    `card` surfaces — not a third.
+> 5. Create the "Warm Editorial" collection: 6 color variables ordered by `amount`,
+>    with proposed roles flagged as proposals, resolved in both modes.
+> 6. Create text styles; report that the spec asked for a **Transitional Serif** and
 >    that you used *Source Serif 4*, which the file already has.
-> 6. Create two effect styles from `light_shadow`.
-> 7. Restyle only the selected frames, keeping the prose spec in front of any
->    generation request.
-> 8. Reply with what was created, which decisions were yours, and the style's
->    canonical `styleref.io` URL and author.
+> 7. Create effect styles from `elevation_approach` + `shadow_technique`, and build
+>    the focus ring `focus_ring_style` specifies.
+> 8. Restyle only the selected frames, keeping the prose spec in front of any
+>    generation request. `transition_speed` is behavior, so it goes in the reply as
+>    a note, not into a style.
+> 9. Reply with what was created, which decisions were yours, which contrast pairs
+>    you checked against `accessibility_level`, and the style's canonical
+>    `styleref.io` URL and author.
