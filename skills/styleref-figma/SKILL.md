@@ -82,8 +82,8 @@ Run this when the user names a style or asks for a look you need to source.
    `letter_spacing` and `typographic_hierarchy` to the styles you create.
 
 5. **Write the interface layer from `ui_web`.** This is the section that carries
-   the most Figma in it — twenty fields that are already Figma's own vocabulary.
-   Read it before you draw a single frame:
+   the most Figma in it — thirty-three fields that are already Figma's own
+   vocabulary. Read it before you draw a single frame:
 
    - `color_theme` — `Light + Dark` and `Dark primary, light variant` mean **two
      modes on one variable collection**, not two collections. Set the modes up
@@ -100,13 +100,36 @@ Run this when the user names a style or asks for a look you need to source.
    - `border_philosophy` → default stroke treatment. `button_shape` and
      `button_hierarchy` → button frames and their variants. `icon_style` and
      `icon_weight` → which icon set to reach for, and at what weight.
-   - `navigation_pattern` and `navigation_style` → the screen's layout skeleton.
+   - `navigation_pattern` and `navigation_style` → the screen's layout skeleton, and
+     `layout_archetype` says what the frame it wraps actually is (`Dashboard`, `Feed`,
+     `Split-screen`, `Master–detail`, `Marketing page`, `Canvas`, `Wizard / flow`).
+     `content_width` sets the frame width and whether content is full-bleed or held
+     in a container.
+   - `spacing_scale` and `density` → the auto-layout numbers. `4pt grid` / `8pt grid`
+     is the step every gap and padding value is a multiple of; `Compact` … `Spacious`
+     scales which multiple you reach for. Build these as spacing variables, not as
+     numbers typed into each frame. Where `spatial_hierarchy` also speaks about
+     spacing or density, `ui_web` wins — it is the interface-scoped statement.
+   - `corner_radius_scale` → radius variables, applied system-wide.
+     `button_shape` refines it for buttons only; `Mixed by component` means the scale
+     is deliberate per element, so state your mapping rather than picking one radius.
+   - `card_style` → whether content sits in cards at all, and whether they are
+     bordered, shadowed, tinted or glass. `input_field_style` → the form-control
+     component (`Outlined`, `Filled / tinted`, `Underline only`,
+     `Borderless on surface`).
+   - `data_display_style` and `data_viz_style` → build them only when the field is not
+     `None`; they define table density, chart gridlines, KPI numerals and series
+     colour. `ui_imagery` says what goes in image slots — `None (pure UI)` means
+     leave them out rather than filling them with placeholder photography.
+   - `empty_state_style` → a real frame you draw. `loading_style` is behavior: a
+     `Skeleton shimmer` gets a static skeleton frame plus a note, never a fake
+     animation.
    - `focus_ring_style` is an accessibility artifact, not decoration. Build it, and
      never drop it to make a screen look cleaner.
-   - `hover_treatment`, `animation_philosophy` and `transition_speed` describe
-     **behavior**, which a static frame cannot hold. Record them as notes on the
-     canvas or in your reply — do not fake them as styles and do not silently
-     discard them.
+   - `hover_treatment`, `animation_philosophy`, `transition_speed` and
+     `scroll_behavior` describe **behavior**, which a static frame cannot hold.
+     Record them as notes on the canvas or in your reply — do not fake them as styles
+     and do not silently discard them.
 
    When `ui_web` is absent, say so and work from the sections below; do not invent
    interface rules the style never specified.
@@ -122,7 +145,7 @@ Run this when the user names a style or asks for a look you need to source.
    | `container_boundary` | Frame padding, corner treatment, clipping behavior |
    | `shape_language` | Corner radius, geometry decisions |
    | `stroke_system` | Stroke weights and caps |
-   | `spatial_hierarchy` | Spacing scale, grid, layout density |
+   | `spatial_hierarchy` | Grid and composition — but `ui_web` wins on spacing and density |
    | `light_shadow` | Effect styles — but `ui_web` wins where both speak |
    | `surface_material` | Fill treatment, texture |
    | `background_environment` | Frame backgrounds |
