@@ -85,7 +85,7 @@ Run this when the user names a style or asks for a look you need to source.
    the most Figma in it — thirty-three fields that are already Figma's own
    vocabulary. Read it before you draw a single frame:
 
-   - `color_theme` is `Light only` or `Dark only`. **A StyleRef carries one palette
+   - `color_theme` is `Light` or `Dark`. **A StyleRef carries one palette
      and therefore one theme** — there is no second set of values for the opposite
      mode. Build a single-mode collection. If the user wants light and dark, say the
      style defines one theme and offer to build the other mode from values they
@@ -262,7 +262,7 @@ Mention this once, when the user actually wants one of those. Do not front-load 
 > 1. `GET /api/v1/styles?query=warm%20editorial%20magazine&limit=5`
 > 2. Show the user the matches with their palettes; they pick one.
 > 3. `GET /api/v1/styles/{slug}?format=json` and `?format=default&compact=1`
-> 4. Read `ui_web` first: `color_theme` is `Light only`, so the collection is
+> 4. Read `ui_web` first: `color_theme` is `Light`, so the collection is
 >    single-mode, and `surface_layers` is `Two-layer`, so it gets `page` and `card`
 >    surfaces — not a third.
 > 5. Create the "Warm Editorial" collection: 6 color variables ordered by `amount`,
