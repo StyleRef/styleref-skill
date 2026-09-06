@@ -85,9 +85,20 @@ Run this when the user names a style or asks for a look you need to source.
    the most Figma in it — thirty-three fields that are already Figma's own
    vocabulary. Read it before you draw a single frame:
 
-   - `color_theme` — `Light + Dark` and `Dark primary, light variant` mean **two
-     modes on one variable collection**, not two collections. Set the modes up
-     first; retrofitting them after the variables exist is far more work.
+   - `color_theme` states an *intention*, and the palette is a **single flat list of
+     hexes** — there is no second set of dark values behind a `Light + Dark` label.
+     So read the palette, not the label: judge from the hexes themselves (the one
+     marked as the page background, or the dominant one by `amount`) which theme the
+     style actually describes.
+     - Build the collection **with modes** when `color_theme` names more than one —
+       adding modes later, once variables exist, is a rebuild — but populate only
+       the mode the palette evidences, and say the other is empty because the style
+       does not define it. Offer to fill it from values the user supplies.
+     - Never derive the missing theme yourself. An inverted palette is a new brand,
+       not this one, and the user will not know you invented it.
+     - When the label and the palette disagree — `Light + Dark` on a palette with a
+       near-white background and no dark surface — trust the palette and tell the
+       user the style is mislabelled.
    - `background_tone` → the page/canvas base fill. `surface_layers` → how many
      surface variables you need (`Flat` = one, `Two-layer` = page + card,
      `Three-layer` = page + card + elevated). Do not invent a fourth.
@@ -216,6 +227,9 @@ The user will repeat what you tell them, so it has to be true.
   role names you proposed, and the mood you read off a selection are all yours. Say so.
 - **Never claim the file now matches the reference exactly.** You applied a
   specification; you did not reproduce an image.
+- **Never invent a dark (or light) counterpart palette.** A style carries one set of
+  colors. Inverting or re-deriving them produces a different brand wearing the same
+  name, and it is the kind of fabrication a user cannot spot afterwards.
 
 ## When something goes wrong
 
@@ -253,8 +267,10 @@ Mention this once, when the user actually wants one of those. Do not front-load 
 > 2. Show the user the matches with their palettes; they pick one.
 > 3. `GET /api/v1/styles/{slug}?format=json` and `?format=default&compact=1`
 > 4. Read `ui_web` first: `color_theme` is `Light + Dark`, so the collection gets
->    **two modes**, and `surface_layers` is `Two-layer`, so it gets `page` and
->    `card` surfaces — not a third.
+>    **two modes** — but the palette is a light one (near-white background, dark
+>    type), so only the light mode gets values and you say the dark mode is empty
+>    because the style never defined it. `surface_layers` is `Two-layer`, so it gets
+>    `page` and `card` surfaces — not a third.
 > 5. Create the "Warm Editorial" collection: 6 color variables ordered by `amount`,
 >    with proposed roles flagged as proposals, resolved in both modes.
 > 6. Create text styles; report that the spec asked for a **Transitional Serif** and
