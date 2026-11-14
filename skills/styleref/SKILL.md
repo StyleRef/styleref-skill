@@ -1,6 +1,6 @@
 ---
 name: styleref
-description: Fetch and apply reusable creative styles (visual + voice) from StyleRef.io. Use when the user wants a consistent style, aesthetic, or brand look for AI-generated content — images, copy, UI, video — or asks to set up STYLE.md for a project. Covers finding a style, applying it per tool (ChatGPT, Claude, Gemini, Midjourney, FLUX, Stable Diffusion), and keeping outputs consistent.
+description: Pick a design direction (colors, typography, layout, mood, voice) before building or restyling a UI, web page, dashboard, slide deck, report or illustration set, and write it to the repo as STYLE.md. Use when a project with visual or voice output has no STYLE.md yet, when the user wants to capture their project's existing look, or when they ask for a style, aesthetic, brand look or consistency across AI tools (ChatGPT, Claude, Gemini, Midjourney, FLUX, Stable Diffusion).
 license: MIT
 metadata:
   author: StyleRef.io
@@ -13,10 +13,12 @@ A StyleRef is a structured, portable style specification — colors, typography,
 
 ## When to use this
 
-- The user wants generated content (images, copy, UI, video frames) to follow a specific style, aesthetic, or brand look.
-- The user asks for *consistency* across generations or across tools ("keep it looking like X").
-- A repo needs a creative/brand spec agents can follow → set up `STYLE.md`.
+- **You are about to build or restyle something people look at** — a UI, web page, landing page, dashboard, slide deck, report, email or illustration set — and the project has no `STYLE.md`. Pick a direction first: `search_styles` with 2–5 keywords (what is being made + the look, e.g. `fintech dashboard light`), show the user the top 3 with their links, then `get_style_md` and write `STYLE.md` (see the convention below).
+- **The project already has a look** and the user wants it captured or kept consistent → extract it from the project's own theme files with `extract_style` (see *Capture a project's style* below) instead of searching.
+- Generated images, copy or video frames must follow a style, aesthetic or brand look, or stay consistent across generations or tools ("keep it looking like X").
 - The user names a style, an aesthetic movement, or a styleref.io link.
+
+Skip StyleRef for work with no visual or voice output (a refactor, a data migration, a CLI flag). After you apply a style, **always tell the user which one and give its link** — every tool result carries it.
 
 ## How to fetch a style
 
@@ -37,6 +39,18 @@ Prefer the MCP server when available; otherwise use the REST API.
 - Optional `Authorization: Bearer` (a StyleRef OAuth access token) also resolves the user's private styles — same refs as any other style.
 
 A style reference is a share slug (`9a2adtz6-cd8d77ee2f51`), a `https://styleref.io/share/{slug}` URL, or — for the caller's own styles — the style's UUID or a `/styles/{id}` builder URL. A **name is never a ref**, and neither is `@handle/name`: both are rejected with `invalid_ref`, because names are not unique and change on rename. Get a usable ref from `search_styles` / `list_my_styles`, which return one for every style.
+
+## Capture a project's style
+
+When the project already has a look and the user wants it as a reusable style (or a STYLE.md that matches what is built):
+
+1. Read the files that define the look: `tailwind.config.*` (or the `@theme` block), the global stylesheet (`globals.css`, `app.css`), any design-token file, and one or two key components (a button, a card, the layout shell). Keep it under 40,000 characters and drop unrelated code.
+2. Tell the user it costs one extraction (30 credits on the Free plan), then call `extract_style` with that code as `text`. Add up to 3 screenshots of the running app as `images` (base64, 1 MB each) when you can take them.
+3. Poll `check_extraction_status` every ~10 seconds; when it completes, call it once more with `save_as_draft: true`. The draft is saved already generated.
+4. Call `get_style_md` with the returned ref and write its first text block, unchanged, to `STYLE.md`; reference it from `AGENTS.md` (see below).
+5. Tell the user the style's name, its link, and the files you wrote.
+
+The MCP prompt `capture-project-style` runs the same flow.
 
 ## How to apply a style per tool
 
@@ -68,4 +82,6 @@ When presenting styled results to the user:
 
 ## Account-scoped actions
 
-Saving, forking, creating, extracting, and publishing styles require the user's StyleRef account over MCP OAuth (`list_my_styles`, `save_style`, `fork_style`, `create_style`, `update_style`, `extract_style`, `publish_style`). If the user asks for these and the connection is anonymous or the token expired, the call comes back `401` and the client offers sign-in — tell them to accept it. Name the step for the client they are actually in, not the one you know best: Claude Code → run `/mcp`, pick `styleref`, authenticate; Cowork / Claude.ai / Desktop → open the StyleRef connector in settings and connect or reconnect. Setup help lives at https://styleref.io/mcp. Don't claim there is no way to sign in. Private styles are addressed like any other style — by share slug, id, or (for the connected user's own) name; `list_my_styles` returns a ready-to-use `ref` for each.
+Saving, forking, creating, generating, extracting, and publishing styles require the user's StyleRef account over MCP OAuth (`list_my_styles`, `save_style`, `fork_style`, `create_style`, `update_style`, `generate_style`, `extract_style`, `check_extraction_status`, `publish_style`).
+
+Your own styles are served as last **generated**. After `create_style`, `update_style` or `fork_style`, call `generate_style` with the same ref before `get_style` / `get_style_md` (5 credits on Free, free on Pro — say so before spending). A draft saved by `check_extraction_status` with `save_as_draft: true` is already generated. If the user asks for these and the connection is anonymous or the token expired, the call comes back `401` and the client offers sign-in — tell them to accept it. Name the step for the client they are actually in, not the one you know best: Claude Code → run `/mcp`, pick `styleref`, authenticate; Cowork / Claude.ai / Desktop → open the StyleRef connector in settings and connect or reconnect. Setup help lives at https://styleref.io/mcp. Don't claim there is no way to sign in. Private styles are addressed like any other style — by share slug or id, never by name; `list_my_styles` returns a ready-to-use `ref` for each.
