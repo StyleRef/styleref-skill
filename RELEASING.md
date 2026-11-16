@@ -7,12 +7,13 @@ user-visible change to the skill ends with a version bump, even a one-word one.
 
 ## Steps
 
-1. **Edit** `skills/styleref/SKILL.md`, `figma/styleref-figma/SKILL.md` (or the
-   manifests). Keep each frontmatter `name` equal to its directory name — CI
-   fails otherwise. Only `skills/` ships in the Claude Code plugin; the Figma
-   skill lives in `figma/` because it only runs inside Figma, where users upload
-   the file themselves. Bump the version for a change to either one anyway, so
-   the tag records which Figma skill went with which release.
+1. **Edit** `skills/styleref/SKILL.md` (or the manifests). Keep each frontmatter
+   `name` equal to its directory name — CI fails otherwise. Add files only in
+   the standard plugin layout (`.claude-plugin/`, `skills/`, `.mcp.json`, plus
+   the repo's existing README, docs, `scripts/` and `.github/`): the Claude
+   directory refuses a version with files outside its allowed list, which is
+   what refused v0.3.0. The Figma agent's skill lives in
+   [StyleRef/styleref-figma-skill](https://github.com/StyleRef/styleref-figma-skill).
 2. **Bump** `version` in `.claude-plugin/plugin.json`. Semver against what the
    *agent* does: patch for wording, minor for new guidance or a new tool the
    skill knows about, major only if the skill's name or scope changes.
@@ -51,18 +52,15 @@ user-visible change to the skill ends with a version bump, even a one-word one.
 
 The skill names MCP tools, REST endpoints, and compile formats. When those change
 in the app, this file's step 7 is not enough — the SKILL.md body has to move too,
-or agents will call tools that no longer exist:
+or agents will call tools that no longer exist. The Figma skill has its own table
+in its repo's RELEASING.md.
 
 | If this changes in the app | Update here |
 | --- | --- |
-| MCP tool names, parameters, or scopes | `styleref`: **How to fetch a style** and **Account-scoped actions**; `styleref-figma`: **Going further** |
-| REST endpoints or query parameters | `styleref`: the **How to fetch a style** REST list; `styleref-figma`: the **Lane A** steps and the **When something goes wrong** table |
+| MCP tool names, parameters, or scopes | `styleref`: **How to fetch a style** and **Account-scoped actions** |
+| REST endpoints or query parameters | `styleref`: the **How to fetch a style** REST list |
 | Compile formats (`default`, `flux`, `midjourney`, `diffusion`, `stylemd`, `json`) | `styleref`: the **How to apply a style per tool** table |
-| The `json` format's section keys or palette shape | `styleref-figma`: **Lane A** steps 3–6 map those keys onto canvas objects |
-| `ui_web` blocks or their option strings (`src/lib/storage/style-schema.json`) | `styleref-figma`: **Lane A** step 5 names the fields and quotes option strings verbatim |
-| The gallery's category list | `styleref-figma`: the category list in **Lane A** step 1 |
 | The STYLE.md convention or its frontmatter | `styleref`: the **STYLE.md convention** section |
-| The style schema's section ids | `styleref-figma`: the id list in **Lane B** step 3 |
 
 ## If the skill is listed in the community marketplace
 

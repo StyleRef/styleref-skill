@@ -62,21 +62,20 @@ if (mcp) {
   }
 }
 
-// skills/ is what the Claude Code plugin installs. figma/ holds the Figma agent's
-// skill: it only works inside Figma (users upload the one file there), so it
-// stays out of skills/ and out of every Claude Code install.
-const SKILL_ROOTS = ['skills', 'figma'];
+// Everything in skills/ installs into Claude Code, and the plugin directory
+// accepts files only in its standard layout. The Figma agent's skill lives in
+// its own repo (StyleRef/styleref-figma-skill) because it cannot run here.
+const SKILL_ROOTS = ['skills'];
 const listSkills = (rel) => {
   const dir = join(root, rel);
   return existsSync(dir)
     ? readdirSync(dir, { withFileTypes: true }).filter((d) => d.isDirectory()).map((d) => ({ rel, name: d.name }))
     : [];
 };
-const pluginSkills = listSkills('skills');
-if (pluginSkills.length === 0) fail('skills/: no skill directories found');
 const skills = SKILL_ROOTS.flatMap(listSkills);
-if (pluginSkills.some((d) => d.name.includes('figma'))) {
-  fail('skills/: a Figma skill would install into Claude Code, where it cannot run — keep it in figma/');
+if (skills.length === 0) fail('skills/: no skill directories found');
+if (skills.some((d) => d.name.includes('figma'))) {
+  fail('skills/: a Figma skill would install into Claude Code, where it cannot run — it belongs in StyleRef/styleref-figma-skill');
 }
 
 for (const { rel, name: dirName } of skills) {
@@ -108,4 +107,4 @@ if (errors.length) {
   for (const error of errors) console.error(`::error::${error}`);
   process.exit(1);
 }
-console.log(`ok: ${pluginSkills.length} plugin skill(s) + ${skills.length - pluginSkills.length} Figma skill(s), ${marketplace?.plugins?.length ?? 0} plugin entry/entries`);
+console.log(`ok: ${skills.length} skill(s), ${marketplace?.plugins?.length ?? 0} plugin entry/entries`);
