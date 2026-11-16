@@ -62,33 +62,45 @@ if (mcp) {
   }
 }
 
-const skillsDir = join(root, 'skills');
-const skills = existsSync(skillsDir)
-  ? readdirSync(skillsDir, { withFileTypes: true }).filter((d) => d.isDirectory())
-  : [];
-if (skills.length === 0) fail('skills/: no skill directories found');
+// skills/ is what the Claude Code plugin installs. figma/ holds the Figma agent's
+// skill: it only works inside Figma (users upload the one file there), so it
+// stays out of skills/ and out of every Claude Code install.
+const SKILL_ROOTS = ['skills', 'figma'];
+const listSkills = (rel) => {
+  const dir = join(root, rel);
+  return existsSync(dir)
+    ? readdirSync(dir, { withFileTypes: true }).filter((d) => d.isDirectory()).map((d) => ({ rel, name: d.name }))
+    : [];
+};
+const pluginSkills = listSkills('skills');
+if (pluginSkills.length === 0) fail('skills/: no skill directories found');
+const skills = SKILL_ROOTS.flatMap(listSkills);
+if (pluginSkills.some((d) => d.name.includes('figma'))) {
+  fail('skills/: a Figma skill would install into Claude Code, where it cannot run — keep it in figma/');
+}
 
-for (const dir of skills) {
-  const path = join(skillsDir, dir.name, 'SKILL.md');
+for (const { rel, name: dirName } of skills) {
+  const label = `${rel}/${dirName}`;
+  const path = join(root, rel, dirName, 'SKILL.md');
   if (!existsSync(path)) {
-    fail(`skills/${dir.name}/: no SKILL.md`);
+    fail(`${label}/: no SKILL.md`);
     continue;
   }
   const body = readFileSync(path, 'utf8');
   const frontmatter = body.match(/^---\n([\s\S]*?)\n---/);
   if (!frontmatter) {
-    fail(`skills/${dir.name}/SKILL.md: no YAML frontmatter`);
+    fail(`${label}/SKILL.md: no YAML frontmatter`);
     continue;
   }
   const fields = frontmatter[1];
-  if (!/^name:\s*\S/m.test(fields)) fail(`skills/${dir.name}/SKILL.md: frontmatter has no "name"`);
+  if (!/^name:\s*\S/m.test(fields)) fail(`${label}/SKILL.md: frontmatter has no "name"`);
   if (!/^description:\s*\S/m.test(fields)) {
     // Without a description an agent never knows when to load the skill.
-    fail(`skills/${dir.name}/SKILL.md: frontmatter has no "description"`);
+    fail(`${label}/SKILL.md: frontmatter has no "description"`);
   }
   const name = fields.match(/^name:\s*(\S+)/m)?.[1];
-  if (name && name !== dir.name) {
-    fail(`skills/${dir.name}/SKILL.md: frontmatter name "${name}" does not match the directory`);
+  if (name && name !== dirName) {
+    fail(`${label}/SKILL.md: frontmatter name "${name}" does not match the directory`);
   }
 }
 
@@ -96,4 +108,4 @@ if (errors.length) {
   for (const error of errors) console.error(`::error::${error}`);
   process.exit(1);
 }
-console.log(`ok: ${skills.length} skill(s), ${marketplace?.plugins?.length ?? 0} plugin entry/entries`);
+console.log(`ok: ${pluginSkills.length} plugin skill(s) + ${skills.length - pluginSkills.length} Figma skill(s), ${marketplace?.plugins?.length ?? 0} plugin entry/entries`);

@@ -4,12 +4,12 @@
 [StyleRef](https://styleref.io) style and *how* to apply it per tool — ChatGPT,
 Claude, Gemini, Midjourney, FLUX, Stable Diffusion, Figma, or a repo's `STYLE.md`.
 
-Two skills ship here:
+Two skills live here:
 
 | Skill | For |
 | --- | --- |
-| `styleref` | Any agent. Fetching a style and applying it per tool, plus the `STYLE.md` convention for repos. |
-| `styleref-figma` | The Figma agent. Writing a style into a file as real color variables, text styles and effect styles — or reading the style already on the canvas back out. |
+| `styleref` (`skills/styleref/`) | Any agent. Fetching a style and applying it per tool, plus the `STYLE.md` convention for repos. This is the one the Claude Code plugin installs. |
+| `styleref-figma` (`figma/styleref-figma/`) | Figma's built-in agent only — not part of the Claude Code plugin. Writing a style into a file as real color variables, text styles and effect styles — or reading the style already on the canvas back out. You upload it to Figma yourself (see below). |
 
 A StyleRef is a structured, portable style specification — colors, typography,
 mood, voice, composition, lighting, and more — compiled into a text block that
@@ -70,10 +70,12 @@ The skill also works without MCP — it falls back to the public REST API at
 
 ### Figma
 
-Figma takes a skill as a single Markdown file. In the Figma agent's chat prompt
-box choose **Skills → Add skill → Upload a file**, and pick
-`skills/styleref-figma/SKILL.md`. Invoke it with `/styleref-figma`. Creating and
-using skills needs a paid Figma plan and a Full seat.
+This is a skill for Figma's own AI agent, not a Figma plugin, and the Claude
+Code plugin does not install it. Figma takes a skill as a single Markdown file:
+in the Figma agent's chat prompt box choose **Skills → Add skill → Upload a
+file**, and pick `figma/styleref-figma/SKILL.md`. Invoke it with
+`/styleref-figma`. Creating and using skills needs a paid Figma plan and a Full
+seat.
 
 Applying and capturing styles need nothing else — the skill reads the public
 gallery through the agent's own web fetch. Saving, extracting from an image, and
@@ -86,7 +88,7 @@ Connectors → Manage → Created by you → Create**, server URL
 | Path | What it is |
 | --- | --- |
 | `skills/styleref/SKILL.md` | The general skill — the only file you need for a manual install |
-| `skills/styleref-figma/SKILL.md` | The Figma skill — upload this one file to the Figma agent |
+| `figma/styleref-figma/SKILL.md` | The Figma skill — upload this one file to the Figma agent; kept out of `skills/` so Claude Code never installs it |
 | `.mcp.json` | The StyleRef MCP server, connected when the plugin is enabled |
 | `.claude-plugin/plugin.json` | Plugin manifest |
 | `.claude-plugin/marketplace.json` | Marketplace catalog, so this repo installs directly |

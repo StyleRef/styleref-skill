@@ -7,10 +7,12 @@ user-visible change to the skill ends with a version bump, even a one-word one.
 
 ## Steps
 
-1. **Edit** `skills/styleref/SKILL.md`, `skills/styleref-figma/SKILL.md` (or the
+1. **Edit** `skills/styleref/SKILL.md`, `figma/styleref-figma/SKILL.md` (or the
    manifests). Keep each frontmatter `name` equal to its directory name — CI
-   fails otherwise. One version pins both skills: a change to either one is a
-   release of the plugin.
+   fails otherwise. Only `skills/` ships in the Claude Code plugin; the Figma
+   skill lives in `figma/` because it only runs inside Figma, where users upload
+   the file themselves. Bump the version for a change to either one anyway, so
+   the tag records which Figma skill went with which release.
 2. **Bump** `version` in `.claude-plugin/plugin.json`. Semver against what the
    *agent* does: patch for wording, minor for new guidance or a new tool the
    skill knows about, major only if the skill's name or scope changes.
