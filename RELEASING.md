@@ -8,19 +8,22 @@ user-visible change to the skill ends with a version bump, even a one-word one.
 ## Steps
 
 1. **Edit** `skills/styleref/SKILL.md` (or the manifests). Keep each frontmatter
-   `name` equal to its directory name — CI fails otherwise. Add files only in
-   the standard plugin layout (`.claude-plugin/`, `skills/`, `.mcp.json`, plus
-   the repo's existing README, docs, `scripts/` and `.github/`): the Claude
-   directory refuses a version with files outside its allowed list, which is
-   what refused v0.3.0. The Figma agent's skill lives in
+   `name` equal to its directory name — CI fails otherwise. Add only Markdown,
+   text, JSON, YAML or image files, in the standard plugin layout
+   (`.claude-plugin/`, `skills/`, `.mcp.json`, README, LICENSE, `.github/`):
+   the Claude directory refuses any version that ships a script or other file
+   type from an unverified organization. That is what refused v0.3.0 and v0.3.1
+   (`scripts/validate.mjs`), so the validator lives inside the CI workflow.
+   The Figma agent's skill lives in
    [StyleRef/styleref-figma-skill](https://github.com/StyleRef/styleref-figma-skill).
 2. **Bump** `version` in `.claude-plugin/plugin.json`. Semver against what the
    *agent* does: patch for wording, minor for new guidance or a new tool the
    skill knows about, major only if the skill's name or scope changes.
-3. **Validate** locally, and load it once to be sure it still behaves:
+3. **Validate** locally (`--strict` would fail on `privacyPolicyUrl`: the
+   directory asks for it, the CLI doesn't know it yet), and load it once to be sure it still behaves:
    ```bash
-   node scripts/validate.mjs
-   claude plugin validate . --strict
+   sed -n '/<<.JS.$/,/^ *JS$/p' .github/workflows/ci.yml | sed '1d;$d' | node --input-type=module
+   claude plugin validate .
    claude --plugin-dir .
    ```
 4. **Commit and push** here, in this repository. Nothing is published until this
