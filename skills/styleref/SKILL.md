@@ -14,7 +14,7 @@ A StyleRef is a structured, portable style specification — colors, typography,
 ## When to use this
 
 - **You are about to build or restyle something people look at** — a UI, web page, landing page, dashboard, slide deck, report, email or illustration set — and the project has no `STYLE.md`. Pick a direction first: `search_styles` with 2–5 keywords (what is being made + the look, e.g. `fintech dashboard light`), show the user the top 3 with their links, then `get_style_md` and write `STYLE.md` (see the convention below).
-- **The project already has a look** and the user wants it captured or kept consistent → extract it from the project's own theme files with `extract_style` (see *Capture a project's style* below) instead of searching.
+- **The project already has a look** and the user wants it captured or kept consistent → extract it from the project itself with `extract_style` (see *Capture a project's style* below) instead of searching.
 - Generated images, copy or video frames must follow a style, aesthetic or brand look, or stay consistent across generations or tools ("keep it looking like X").
 - The user names a style, an aesthetic movement, or a styleref.io link.
 
@@ -44,11 +44,13 @@ A style reference is a share slug (`9a2adtz6-cd8d77ee2f51`), a `https://styleref
 
 When the project already has a look and the user wants it as a reusable style (or a STYLE.md that matches what is built):
 
-1. Read the files that define the look: `tailwind.config.*` (or the `@theme` block), the global stylesheet (`globals.css`, `app.css`), any design-token file, and one or two key components (a button, a card, the layout shell). Keep it under 40,000 characters and drop unrelated code.
-2. Tell the user it costs one extraction (30 credits on the Free plan), then call `extract_style` with that code as `text`. Add up to 3 screenshots of the running app as `images` (base64, 1 MB each) when you can take them.
-3. Poll `check_extraction_status` every ~10 seconds; when it completes, call it once more with `save_as_draft: true`. The draft is saved already generated.
-4. Call `get_style_md` with the returned ref and write its first text block, unchanged, to `STYLE.md`; reference it from `AGENTS.md` (see below).
-5. Tell the user the style's name, its link, and the files you wrote.
+1. Find where the look is defined. App or website: the theme and token files (`tailwind.config.*` or the `@theme` block, the global stylesheet, a token file) and one or two key components. Slide deck, document or report: the template or theme and any style or brand guide. Illustration, image, video or game project: the finished pieces themselves and any art-direction notes.
+2. Write a style summary in plain text. Do not paste raw files: a summary extracts better. Copy values exactly (hex colors, font names, sizes, radii, spacing); never round or guess them. List only the colors the default theme actually uses, each with its role and rough share of the screen (background most, accent least), and mention an alternate theme in one line. Then cover typography, shape and depth, layout and components, motion and mood. For work that is not a UI, cover medium and technique, line and texture, lighting, composition and voice instead. Add the text of any style guide the project has. Keep it under 40,000 characters.
+3. Add up to 3 images (base64, 1 MB each) whenever you can: screenshots of the main screens of the running app, or representative finished pieces. Images set the proportions and feel; your text sets the exact values. A project that is only images needs just a short note saying what they are.
+4. Tell the user it costs one extraction (30 credits on the Free plan), then call `extract_style` with the summary as `text` and the images as `images`.
+5. Poll `check_extraction_status` every ~10 seconds; when it completes, call it once more with `save_as_draft: true`. The draft is saved already generated.
+6. Call `get_style_md` with the returned ref and write its first text block, unchanged, to `STYLE.md`; reference it from `AGENTS.md` (see below).
+7. Tell the user the style's name, its link, and the files you wrote.
 
 The MCP prompt `capture-project-style` runs the same flow.
 
