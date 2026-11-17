@@ -65,12 +65,6 @@ claude mcp add --transport http styleref https://styleref.io/api/mcp
 The skill also works without MCP — it falls back to the public REST API at
 `https://styleref.io/api/v1`, which needs no setup.
 
-### Figma
-
-The skill for Figma's built-in AI agent lives in its own repository,
-[StyleRef/styleref-figma-skill](https://github.com/StyleRef/styleref-figma-skill),
-with its install steps. It is not part of this plugin.
-
 ## What's in here
 
 | Path | What it is |
