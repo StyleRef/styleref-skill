@@ -64,7 +64,6 @@ The skill also works without MCP — it falls back to the public REST API at
 | `.mcp.json` | The StyleRef MCP server, connected when the plugin is enabled |
 | `.claude-plugin/plugin.json` | Plugin manifest |
 | `.claude-plugin/marketplace.json` | Marketplace catalog, so this repo installs directly |
-| `.claude-plugin/icon.png` | Listing icon |
 
 ## Documentation
 
