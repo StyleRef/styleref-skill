@@ -44,18 +44,9 @@ style and has no way to fetch one.
 
 The skill is a plain `SKILL.md` folder, so it works in any skills-compatible
 agent — Cursor, Codex, Gemini CLI, Copilot, opencode, Goose, and others. Copy
-`skills/styleref/` into the agent's skills directory:
-
-```bash
-git clone https://github.com/StyleRef/styleref-skill.git
-```
-
-```bash
-cp -R styleref-skill/skills/styleref ~/.claude/skills/styleref
-```
-
-Use `.claude/skills/` instead of `~/.claude/skills/` to scope it to one project,
-or the equivalent skills directory for your agent. Then connect the MCP server
+the `skills/styleref/` folder from this repository into the agent's skills
+directory: `~/.claude/skills/styleref` for every project, `.claude/skills/styleref`
+for one, or the equivalent directory for your agent. Then connect the MCP server
 separately:
 
 ```bash
@@ -73,6 +64,7 @@ The skill also works without MCP — it falls back to the public REST API at
 | `.mcp.json` | The StyleRef MCP server, connected when the plugin is enabled |
 | `.claude-plugin/plugin.json` | Plugin manifest |
 | `.claude-plugin/marketplace.json` | Marketplace catalog, so this repo installs directly |
+| `.claude-plugin/icon.png` | Listing icon |
 
 ## Documentation
 
